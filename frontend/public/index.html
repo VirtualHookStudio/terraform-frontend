@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDS DATA</title>
+</head>
+<body>
+    <h1>Products</h1>
+    <ul id="products-list"></ul>
+    <script>
+        async function loadProducts() {
+            try {
+                const response = await fetch("http://localhost:3000/products")
+                const data = await response.json()
+            
+                const list = document.getElementById("products-list")
+                list.innerHTML = ""
+            
+                data.forEach(product => {
+                    const item = document.createElement("li")
+                    item.textContent = `${product.name} - $ ${product.price.toFixed(2)}`
+                    list.appendChild(item)
+                });
+            
+            } catch (error) {
+                console.error("Erro ao buscar os produtos:", error)
+                document.getElementById("products-list").innerHTML = "<li>Erro ao carregar os produtos.</li>"
+            }
+        }
+    
+        document.addEventListener("DOMContentLoaded", loadProducts);
+    </script>
+</body>
+</html>

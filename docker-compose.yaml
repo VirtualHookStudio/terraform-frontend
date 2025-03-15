@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=database
+    ports:
+      - "5432:5432"
+  
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=123456
+      - DB_NAME=database
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    command: /bin/sh -c "sleep 5 && npm start"
+  
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
